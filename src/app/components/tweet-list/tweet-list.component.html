@@ -1,0 +1,18 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">user</th>
+        <th scope="col">hashtag</th>
+        <th scope="col">Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of parsedTweets">
+        <th scope="row">1</th>
+        <td>{{ characterLimitCount(item.user.name)}}</td>
+        <td>#{{item.entities.hashtags[0].text}}</td>
+        <td>{{item.created_at | date:'medium'}}</td>
+      </tr>
+    </tbody>
+  </table>
