@@ -17,7 +17,7 @@ export class TwitterStreamService implements OnInit{
 
   subject$ = new Subject();
 
-  interval$ = interval(1000);
+  interval$ = interval(300);
 
   constructor(private http:HttpClient) {}
 

@@ -12,66 +12,81 @@ import { AppState } from '../../store/appState.state';
 })
 export class TweetListComponent implements OnInit, OnDestroy {
 
-  parsedTweets :any[]=[];
-  input:string = ''
+  parsedTweets: any[] = [];
+  input: string = ''
 
   tpmSubscription: Subscription | undefined;
   streamSubscription: Subscription | undefined;
 
-  constructor(private store:Store<AppState>, private streamService:TwitterStreamService) { }
+  constructor(private store: Store<AppState>, private streamService: TwitterStreamService) { }
 
   ngOnInit(): void {
     this.tpmSubscription = this.tpmObject()
-    .subscribe( (tweets:any) => {
-        console.log('que trae?',tweets.input)
+      .subscribe((statetpm: any) => {
+        this.input = statetpm.input
 
-        if(tweets.input !== ''){
-          this.parseTweets(tweets)
-        } else {
+        if (statetpm.input !== '') {
+          this.parseTweets()
+        } 
+        
+        if (statetpm.input === ''){
           this.streamSubscription?.unsubscribe()
         }
-    })
+      })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.cancelSubscriptions()
   }
 
-  cancelSubscriptions(){
+  cancelSubscriptions() {
     this.tpmSubscription?.unsubscribe()
     this.streamSubscription?.unsubscribe()
   }
 
 
 
-  tweetsWithHashtag(tweets:any){
-    const tweetsWithHash = tweets.filter( (tweet:any) => tweet.entities.hashtags.length)
-    this.parsedTweets.concat(tweetsWithHash)
-    return tweetsWithHash
+  tweetsWithHashtag(tweets:any) {
+    if(this.input === '##'){
+      console.log('entra1')
+      return tweets.filter((tweet: any) => tweet.entities.hashtags.length)
+    }
+
+    if(this.input !== '##' && this.input !== '' ){
+      console.log('entra2')
+      return tweets.filter((tweet: any) => this.hasInputHashtag(tweet.entities.hashtags) )
+    }
+  }
+
+  hasInputHashtag(tweets:any[]) {
+    return tweets.some( (tweet:any)=> tweet.text.toUpperCase() === this.input.toUpperCase() )
   }
 
 
   extractMainData(rawTweets: []) {
-    return rawTweets.map( (tweet:any) => tweet.d)
+    return rawTweets.map((tweet: any) => tweet.d)
   }
 
-  characterLimitCount(str:string){
-    return  (str.length>9) ? (str.slice(0,6)+'..'):(str)
+  characterLimitCount(str: string) {
+    return (str.length > 9) ? (str.slice(0, 6) + '..') : (str)
   }
 
-  tpmObject(){
-    return  this.store.select('tpm')
+  tpmObject() {
+    return this.store.select('tpm')
   }
 
   //return  (str.length>9) ? (str.slice(0,6)+'..'):(str)
-  parseTweets(tweets:any[]){
-    this.streamSubscription = this.streamService.getTweetsStream().pipe(
-      map( tweet => this.extractMainData(tweet))
-    ).subscribe(tweets => {
-
-      this.parsedTweets = [...this.parsedTweets, ...this.tweetsWithHashtag(tweets)]
-      console.log('llamado', this.parsedTweets)
-    })
+  parseTweets() {
+    this.streamSubscription =
+      this.streamService
+        .getTweetsStream()
+        .pipe(
+          map(tweet => {
+            return this.extractMainData(tweet)
+          })
+        ).subscribe((tweets:any) => {
+          this.parsedTweets = [ ...this.tweetsWithHashtag(tweets), ...this.parsedTweets]
+        })
   }
 
 }
