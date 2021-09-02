@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { PubNubAngular } from 'pubnub-angular2';
 import { HttpClient } from '@angular/common/http';
 import { interval, Subject } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeAll, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -35,8 +35,8 @@ export class TwitterStreamService implements OnInit{
 
   getTweetsStream(){
     return this.interval$.pipe(
-      switchMap(() => this.getTweets()),
-      tap( ()=> console.log('sigue?'))
+      mergeMap(() => this.getTweets()),
+      distinctUntilChanged(),
     )
   }
 

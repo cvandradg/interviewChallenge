@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table spaced">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -8,8 +8,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of parsedTweets">
-        <th scope="row">1</th>
+      <tr *ngFor="let item of parsedTweets | sortByTime:'asc'; index as i;">
+        <th scope="row">{{i+1}}</th>
         <td>{{ characterLimitCount(item.user.name)}}</td>
         <td>#{{item.entities.hashtags[0].text}}</td>
         <td>{{item.created_at | date:'medium'}}</td>

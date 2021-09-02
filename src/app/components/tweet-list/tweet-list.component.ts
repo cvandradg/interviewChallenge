@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { of, Subscription } from 'rxjs';
-import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { TwitterStreamService } from '../../services/twitter-stream.service';
 import { AppState } from '../../store/appState.state';
 
@@ -18,7 +18,7 @@ export class TweetListComponent implements OnInit, OnDestroy {
   tpmSubscription: Subscription | undefined;
   streamSubscription: Subscription | undefined;
 
-  constructor(private store: Store<AppState>, private streamService: TwitterStreamService) { }
+  constructor(private store: Store<AppState>, private streamService: TwitterStreamService, private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.tpmSubscription = this.tpmObject()
@@ -75,7 +75,12 @@ export class TweetListComponent implements OnInit, OnDestroy {
     return this.store.select('tpm')
   }
 
-  //return  (str.length>9) ? (str.slice(0,6)+'..'):(str)
+  sortbyTime(tweets:any[]){
+    return tweets.sort(function(c, d) {
+      return  +new Date(d.created_at) - +new Date(c.created_at)
+    })
+  }
+
   parseTweets() {
     this.streamSubscription =
       this.streamService
@@ -83,9 +88,12 @@ export class TweetListComponent implements OnInit, OnDestroy {
         .pipe(
           map(tweet => {
             return this.extractMainData(tweet)
-          })
+          }),
+          distinctUntilChanged()
         ).subscribe((tweets:any) => {
-          this.parsedTweets = [ ...this.tweetsWithHashtag(tweets), ...this.parsedTweets]
+           this.parsedTweets.push(...this.tweetsWithHashtag(tweets))
+           this.parsedTweets = this.sortbyTime(this.parsedTweets)
+          // this.ref.detectChanges()
         })
   }
 

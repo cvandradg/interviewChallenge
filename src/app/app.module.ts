@@ -11,13 +11,15 @@ import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { TweetListComponent } from './components/tweet-list/tweet-list.component';
+import { SortByTimePipe } from './components/pipes/sort-by-time.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     TweetsCounterComponent,
     HashtagInputComponent,
-    TweetListComponent
+    TweetListComponent,
+    SortByTimePipe
   ],
   imports: [
     BrowserModule,
