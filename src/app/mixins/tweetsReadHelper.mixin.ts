@@ -6,21 +6,21 @@ export class tweetsReadHelper {
   input: string = ''
   tpmSubscription: Subscription | undefined;
   streamSubscription: Subscription | undefined;
- 
-  tweetsWithHashtag(tweets:any, input:string) {
-    if(input === '##'){
+
+  tweetsWithHashtag(tweets: any, input: string) {
+    if (input === '##') {
       console.log('entra1')
       return tweets.filter((tweet: any) => tweet.entities.hashtags.length)
     }
 
-    if(input !== '##' && input !== '' ){
+    if (input !== '##' && input !== '') {
       console.log('entra2')
-      return tweets.filter((tweet: any) => this.hasInputHashtag(tweet.entities.hashtags, input) )
+      return tweets.filter((tweet: any) => this.hasInputHashtag(tweet.entities.hashtags, input))
     }
   }
 
-  hasInputHashtag(tweets:any[], input:string) {
-    return tweets.some( (tweet:any)=> tweet.text.toUpperCase() === input.toUpperCase() )
+  hasInputHashtag(tweets: any[], input: string) {
+    return tweets.some((tweet: any) => tweet.text.toUpperCase() === input.toUpperCase())
   }
 
 
@@ -32,13 +32,15 @@ export class tweetsReadHelper {
     return (str.length > 9) ? (str.slice(0, 6) + '..') : (str)
   }
 
-  tpmObject(store:any) {
+  tpmObject(store: any) {
     return store.select('tpm')
   }
 
-  sortbyTime(tweets:any[]){
-    return tweets.sort(function(c, d) {
-      return  +new Date(d.created_at) - +new Date(c.created_at)
+  sortbyTime(tweets: any[]) {
+    return tweets.sort(function (c, d) {
+      return +new Date(d.created_at) - +new Date(c.created_at)
     })
   }
+
+
 }

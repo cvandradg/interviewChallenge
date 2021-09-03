@@ -24,15 +24,9 @@ export class TweetListComponent extends tweetsReadHelper implements OnInit, OnDe
   ngOnInit(): void {
     this.tpmSubscription = this.tpmObject(this.store)
       .subscribe((statetpm: any) => {
-        this.input = statetpm.input
-
-        if (statetpm.input !== '') {
-          this.parseTweets()
-        } 
         
-        if (statetpm.input === ''){
-          this.streamSubscription?.unsubscribe()
-        }
+        this.input = statetpm.input
+        this.isSubscribedTweetsStream(statetpm) || this.isUnSuscribedTweetsStream(statetpm)
       })
   }
 
@@ -53,8 +47,25 @@ export class TweetListComponent extends tweetsReadHelper implements OnInit, OnDe
         .subscribe((tweets:any) => {
            this.parsedTweets.push(...this.tweetsWithHashtag(tweets, this.input))
            this.parsedTweets = this.sortbyTime(this.parsedTweets)
-          // this.ref.detectChanges()
         })
+  }
+
+  isSubscribedTweetsStream(statetpm: any) {
+    if (statetpm.input !== '') {
+      this.parseTweets()
+      return true;
+    }
+
+    return false;
+  }
+
+  isUnSuscribedTweetsStream(statetpm: any) {
+    if (statetpm.input === '') {
+      this.streamSubscription?.unsubscribe()
+      return true;
+    }
+
+    return false;
   }
 
 }
