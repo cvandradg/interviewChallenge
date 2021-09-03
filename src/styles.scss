@@ -6,6 +6,9 @@
     --bg-primary: #23232e;
     --bg-secondary: #141418;
     --transition-speed: 600ms;
+    --bg-color: white;
+    --typewriterSpeed: 6s;
+    --typewriterCharacters: 24;
   }
 
 body {
@@ -13,6 +16,7 @@ body {
     background-color: white;
     margin: 0;
     padding: 0;
+    
   }
   
   body::-webkit-scrollbar {

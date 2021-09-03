@@ -13,6 +13,10 @@ import { HttpClientModule } from "@angular/common/http";
 import { TweetListComponent } from './components/tweet-list/tweet-list.component';
 import { SortByTimePipe } from './components/pipes/sort-by-time.pipe';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './components/home/home.component';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +25,9 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
     HashtagInputComponent,
     TweetListComponent,
     SortByTimePipe,
-    SideBarComponent
+    SideBarComponent,
+    WelcomeComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +38,8 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
       logOnly: environment.production
     }),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule
   ],
   providers: [PubNubAngular],
   bootstrap: [AppComponent]
