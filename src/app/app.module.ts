@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { TweetListComponent } from './components/tweet-list/tweet-list.component';
 import { SortByTimePipe } from './components/pipes/sort-by-time.pipe';
+import { SideBarComponent } from './components/side-bar/side-bar.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SortByTimePipe } from './components/pipes/sort-by-time.pipe';
     TweetsCounterComponent,
     HashtagInputComponent,
     TweetListComponent,
-    SortByTimePipe
+    SortByTimePipe,
+    SideBarComponent
   ],
   imports: [
     BrowserModule,

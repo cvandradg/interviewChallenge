@@ -18,7 +18,10 @@ export class HashtagInputComponent  implements OnInit {
   input: FormGroup;
   tpmSubscription: Subscription | undefined;
 
-  constructor(private store: Store<AppState>, private streamService: TwitterStreamService) {
+  constructor(
+    private store: Store<AppState>, 
+    )
+  {
     this.input = new FormGroup({
       search: new FormControl()
     });
@@ -32,6 +35,10 @@ export class HashtagInputComponent  implements OnInit {
       )
       .subscribe(input => {
         this.store.dispatch(tpm.setInput({ input }))
+      })
+
+      this.store.select('tpm').subscribe((state:any)=>{
+        state.input === '' && this.input.patchValue({ search: '' })
       })
   }
 }

@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { state } from '@angular/animations';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { of, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
@@ -13,10 +14,9 @@ import { AppState } from '../../store/appState.state';
 })
 export class TweetListComponent extends tweetsReadHelper implements OnInit, OnDestroy {
 
-
-  
-
-  constructor(private store: Store<AppState>, private streamService: TwitterStreamService, private ref: ChangeDetectorRef) 
+  constructor(
+    private store: Store<AppState>,
+    private streamService: TwitterStreamService) 
   {
     super()
   }
@@ -24,8 +24,12 @@ export class TweetListComponent extends tweetsReadHelper implements OnInit, OnDe
   ngOnInit(): void {
     this.tpmSubscription = this.tpmObject(this.store)
       .subscribe((statetpm: any) => {
-        
+
+
+
         this.input = statetpm.input
+        this.isStreamOn = statetpm.isStreamOn
+        this.shouldClear(statetpm)
         this.isSubscribedTweetsStream(statetpm) || this.isUnSuscribedTweetsStream(statetpm)
       })
   }
@@ -45,13 +49,15 @@ export class TweetListComponent extends tweetsReadHelper implements OnInit, OnDe
       this.streamService
         .getTweetsStream()
         .subscribe((tweets:any) => {
-           this.parsedTweets.push(...this.tweetsWithHashtag(tweets, this.input))
-           this.parsedTweets = this.sortbyTime(this.parsedTweets)
+          
+           this.parsedTweets =this.getParsedTweets(tweets)
+           
         })
   }
 
   isSubscribedTweetsStream(statetpm: any) {
-    if (statetpm.input !== '') {
+    console.log(statetpm.isStreamOn)
+    if (statetpm.isStreamOn) {
       this.parseTweets()
       return true;
     }
@@ -60,12 +66,17 @@ export class TweetListComponent extends tweetsReadHelper implements OnInit, OnDe
   }
 
   isUnSuscribedTweetsStream(statetpm: any) {
-    if (statetpm.input === '') {
+    if (!statetpm.isStreamOff) {
       this.streamSubscription?.unsubscribe()
       return true;
     }
 
-    return false;
+    return false
   }
 
+  shouldClear(statetpm:any){
+    console.log('should clean,',statetpm.isClear)
+      if(statetpm.isClear)
+      this.parsedTweets = []
+  }
 }

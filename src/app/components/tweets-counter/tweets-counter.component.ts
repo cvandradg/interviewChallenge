@@ -17,16 +17,19 @@ export class TweetsCounterComponent extends tweetsReadHelper implements OnInit, 
   startTime: any;
   totalTweets = 0;
 
-  constructor(private store: Store<AppState>, private streamService: TwitterStreamService) 
-  {
+  constructor(
+    private store: Store<AppState>,
+    private streamService: TwitterStreamService) {
     super()
   }
 
   ngOnInit(): void {
     this.tpmSubscription = this.tpmObject(this.store)
       .subscribe((statetpm: any) => {
-        
+
         this.input = statetpm.input
+        this.isStreamOn = statetpm.isStreamOn
+        this.shouldClear(statetpm)
         this.isSubscribedTweetsStream(statetpm) || this.isUnSuscribedTweetsStream(statetpm)
       })
   }
@@ -40,11 +43,10 @@ export class TweetsCounterComponent extends tweetsReadHelper implements OnInit, 
     this.streamSubscription?.unsubscribe()
   }
 
-  tweetsPerMinute(){
+  tweetsPerMinute() {
     const currentTime = new Date();
     const difference = currentTime.getTime() - this.startTime.getTime(); // This will give difference in milliseconds
     const diffInMin = Math.round(difference / 1000);
-    console.log('diff in mins,',this.parsedTweets.length+1, diffInMin)
     this.tpm = (this.parsedTweets.length / diffInMin).toFixed(2)
   }
 
@@ -52,17 +54,16 @@ export class TweetsCounterComponent extends tweetsReadHelper implements OnInit, 
     this.streamSubscription =
       this.streamService
         .getTweetsStream()
-        .subscribe((tweets:any) => {
-           console.log('tweets,',tweets)
-           this.totalTweets += tweets.length
-           this.parsedTweets.unshift(...this.tweetsWithHashtag(tweets, this.input))
-           console.log('parsed,',this.parsedTweets)
-           this.tweetsPerMinute()
+        .subscribe((tweets: any) => {
+          this.totalTweets += tweets.length
+          this.parsedTweets = this.getParsedTweets(tweets)
+          this.tweetsPerMinute()
         })
   }
 
   isSubscribedTweetsStream(statetpm: any) {
-    if (statetpm.input !== '') {
+
+    if (statetpm.isStreamOn) {
       this.parseTweets()
       this.startTime = new Date()
       return true;
@@ -72,11 +73,20 @@ export class TweetsCounterComponent extends tweetsReadHelper implements OnInit, 
   }
 
   isUnSuscribedTweetsStream(statetpm: any) {
-    if (statetpm.input === '') {
+    if (statetpm.isStreamOff) {
       this.streamSubscription?.unsubscribe()
       return true;
     }
 
     return false
   }
+
+  shouldClear(statetpm: any) {
+    if (statetpm.isClear) {
+      this.tpm = ''
+      this.totalTweets = 0
+    }
+  }
+
+
 }

@@ -1,19 +1,21 @@
+import { ThrowStmt } from "@angular/compiler";
 import { Subscription } from "rxjs";
 
 export class tweetsReadHelper {
 
   parsedTweets: any[] = [];
   input: string = ''
+  isStreamOn!: boolean;
   tpmSubscription: Subscription | undefined;
   streamSubscription: Subscription | undefined;
 
   tweetsWithHashtag(tweets: any, input: string) {
-    if (input === '##') {
+    if (this.isStreamOn && input === '') {
       console.log('entra1')
       return tweets.filter((tweet: any) => tweet.entities.hashtags.length)
     }
 
-    if (input !== '##' && input !== '') {
+    if (this.isStreamOn && input !== '') {
       console.log('entra2')
       return tweets.filter((tweet: any) => this.hasInputHashtag(tweet.entities.hashtags, input))
     }
@@ -41,6 +43,20 @@ export class tweetsReadHelper {
       return +new Date(d.created_at) - +new Date(c.created_at)
     })
   }
+  
+  getParsedTweets(tweets:any) {
+    let temparray = [...this.parsedTweets, ...this.tweetsWithHashtag(tweets, this.input)]
 
+    return temparray = Array.from(new Set(temparray.map(a => a.id)))
+      .map(id => {
+        return temparray.find(a => a.id === id)
+      })
+
+      // return this.parsedTweets.unshift(...temparray)
+
+      // return this.parsedTweets
+
+    // return this.parsedTweets = this.sortbyTime(this.parsedTweets)
+  }
 
 }

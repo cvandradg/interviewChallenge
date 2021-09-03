@@ -5,4 +5,4 @@ export const streamOff = createAction('[TPM] streamOff');
 
 
 export const setInput = createAction('[TPM] setInput', props<{input: string}>());
-export const unsetInput = createAction('[TPM] unsetInput');
+export const clear = createAction('[TPM] clear');
