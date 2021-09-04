@@ -1,50 +1,98 @@
-import { ThrowStmt } from "@angular/compiler";
+/** 
+ * Functions and variables used in multiple components.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
+
+import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
+import { AppState } from "../store/appState.state";
 
 export class tweetsReadHelper {
 
   parsedTweets: any[] = [];
   input: string = ''
   isStreamOn!: boolean;
-  tpmSubscription: Subscription | undefined;
-  streamSubscription: Subscription | undefined;
+  tpmSubscription!: Subscription;
+  streamSubscription!: Subscription;
 
+  /** 
+   * Selects the tweets that contains the given hashtag (if applicable).
+   * 
+   * @param {array any} tweets
+   * @param {String} input
+   * @return {array | void} 
+   */
   tweetsWithHashtag(tweets: any, input: string) {
     if (this.isStreamOn && input === '') {
-      console.log('entra1')
       return tweets.filter((tweet: any) => tweet.entities.hashtags.length)
     }
 
     if (this.isStreamOn && input !== '') {
-      console.log('entra2')
       return tweets.filter((tweet: any) => this.hasInputHashtag(tweet.entities.hashtags, input))
     }
   }
 
-  hasInputHashtag(tweets: any[], input: string) {
+  /** 
+   * Identifies if the input matches a hashtag inside the tweets.
+   * 
+   * @param {array any} tweets
+   * @param {String} input
+   * @return {boolean} 
+   */
+  hasInputHashtag(tweets: any[], input: string): boolean {
     return tweets.some((tweet: any) => tweet.text.toUpperCase() === input.toUpperCase())
   }
 
-
-  extractMainData(rawTweets: []) {
+  /** 
+   * Selects the key where the most valuable content is located.
+   * 
+   * @param {array any} rawTweets
+   * @return {array} 
+   */
+  extractMainData(rawTweets: []): Array<any> {
     return rawTweets.map((tweet: any) => tweet.d)
   }
 
-  characterLimitCount(str: string) {
+  /** 
+   * Shortens the displayed user name.
+   * 
+   * @param {array any} str
+   * @return {String} 
+   */
+  characterLimitCount(str: string): string {
     return (str.length > 9) ? (str.slice(0, 6) + '..') : (str)
   }
 
-  tpmObject(store: any) {
+  /** 
+   * Returns the store state of tpm.
+   * 
+   * @param {Store} store
+   * @return {Store} 
+   */
+  tpmObject(store: any): Store<AppState> {
     return store.select('tpm')
   }
 
-  sortbyTime(tweets: any[]) {
+  /** 
+   * Sorts the given array of tweets.
+   * 
+   * @param {array any} tweets
+   * @return {array} 
+   */
+  sortbyTime(tweets: any[]): Array<any> {
     return tweets.sort(function (c, d) {
       return +new Date(d.created_at) - +new Date(c.created_at)
     })
   }
-  
-  getParsedTweets(tweets:any) {
+
+  /** 
+   * Unifies and sorts the unique tweets into a single array.
+   * 
+   * @param {array any} tweets
+   * @return {array} 
+   */
+  getParsedTweets(tweets: any): Array<any> {
     let temparray = [...this.parsedTweets, ...this.tweetsWithHashtag(tweets, this.input)]
 
     return temparray = Array.from(new Set(temparray.map(a => a.id)))
@@ -52,11 +100,6 @@ export class tweetsReadHelper {
         return temparray.find(a => a.id === id)
       })
 
-      // return this.parsedTweets.unshift(...temparray)
-
-      // return this.parsedTweets
-
-    // return this.parsedTweets = this.sortbyTime(this.parsedTweets)
   }
 
 }

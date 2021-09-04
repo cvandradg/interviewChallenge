@@ -1,3 +1,10 @@
+/** 
+ * Mapping of the reducers across the application.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
+
+
 import { ActionReducerMap } from "@ngrx/store";
 import { AppState } from "./appState.state";
 import * as api from "./api/api.reducer";

@@ -1,6 +1,12 @@
-import { createReducer, on } from '@ngrx/store';
-import * as tpmActions from './tpm.actions';
+/** 
+ * Tweets per minute reducers.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
+
 import { State } from "./tpm.state";
+import * as tpmActions from './tpm.actions';
+import { createReducer, on } from '@ngrx/store';
 
 export const initialState: State = {
    isStreamOn: false,

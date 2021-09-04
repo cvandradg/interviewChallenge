@@ -1,3 +1,9 @@
+/** 
+ * First page the user sees.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({

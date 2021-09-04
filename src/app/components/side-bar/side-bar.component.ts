@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/appState.state';
+/** 
+ * Sidebar, provides buttons to interact with the stream of tweets.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
 
+
+import { Store } from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { AppState } from '../../store/appState.state';
 import * as tpm from "../../store/tweeterPerMinute/tpm.actions";
+
 @Component({
   selector: 'app-side-bar',
   templateUrl: './side-bar.component.html',
@@ -15,16 +22,30 @@ export class SideBarComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
-  start(){
+ /** 
+  * Starts the stream of tweets.
+  * 
+  * @return {void} 
+  */
+  start(): void{
   this.store.dispatch(tpm.streamOn())
   }
 
-  stop(){
+ /** 
+  * Stops the stream of tweets.
+  * 
+  * @return {void} 
+  */
+  stop(): void{
     this.store.dispatch(tpm.streamOff())
   }
 
-  clear(){
+ /** 
+  * Clears the hashtag input and tweets displayed.
+  * 
+  * @return {void} 
+  */
+  clear(): void{
     this.store.dispatch(tpm.clear())
   }
 
