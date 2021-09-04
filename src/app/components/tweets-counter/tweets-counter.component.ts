@@ -56,8 +56,6 @@ export class TweetsCounterComponent extends tweetsReadHelper implements OnInit, 
     const currentTime = new Date();
     const difference = currentTime.getTime() - this.startTime.getTime(); // This will give difference in milliseconds
     const diffInMin = Math.round(difference / 1000);
-    console.log('length,',this.parsedTweets.length)
-    console.log('diffInMin,',diffInMin)
     this.tpm = (this.parsedTweets.length / diffInMin).toFixed(2)
   }
 
