@@ -5,14 +5,16 @@
         <th scope="col">user</th>
         <th scope="col">hashtag</th>
         <th scope="col">Created</th>
+        <th scope="col">Country</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of parsedTweets | sortByTime:'asc'; index as i;">
         <th scope="row">{{i+1}}</th>
-        <td>{{ characterLimitCount(item.user.name)}}</td>
-        <td>#{{item.entities.hashtags[0].text}}</td>
-        <td>{{item.created_at | date:'medium'}}</td>
+        <td>{{ characterLimitCount(item?.user?.name)}}</td>
+        <td>#{{item?.entities.hashtags[0].text}}</td>
+        <td>{{item?.created_at | date:'medium'}}</td>
+        <td>{{item?.place?.country}}</td>
       </tr>
     </tbody>
   </table>

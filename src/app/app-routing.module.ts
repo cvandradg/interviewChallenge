@@ -1,8 +1,20 @@
+/** 
+ * Routes of the application
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
+
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 
+
+/** 
+  * Application routes. 
+  * 
+  * @type {array} 
+  */
 const routes: Routes = [
     {
         path: 'welcome',

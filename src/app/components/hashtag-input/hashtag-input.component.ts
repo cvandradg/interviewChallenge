@@ -1,12 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { fromEvent, of, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
-import { TwitterStreamService } from '../../services/twitter-stream.service';
-import { AppState } from '../../store/appState.state';
+/** 
+ * Hashtag input to search in the stream of tweets.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
 
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { AppState } from '../../store/appState.state';
+import { FormControl, FormGroup } from '@angular/forms';
 import * as tpm from "../../store/tweeterPerMinute/tpm.actions";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+
 
 @Component({
   selector: 'app-hashtag-input',
@@ -16,7 +21,7 @@ import * as tpm from "../../store/tweeterPerMinute/tpm.actions";
 export class HashtagInputComponent  implements OnInit {
 
   input: FormGroup;
-  tpmSubscription: Subscription | undefined;
+  tpmSubscription!: Subscription;
 
   constructor(
     private store: Store<AppState>, 

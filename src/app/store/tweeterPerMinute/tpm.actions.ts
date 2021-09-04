@@ -1,3 +1,9 @@
+/** 
+ * Tweets per minute actions.
+ * 
+ * @author Claudio Andrade <candradeg9182@gmail.com> 
+ */
+
 import { createAction, props } from '@ngrx/store';
 
 export const streamOn = createAction('[TPM] streamOn');
